@@ -1,0 +1,44 @@
+# Python environment (conda env name: torch-env, Python 3.11)
+#
+# Rebuild from scratch:
+#   conda create -n torch-env python=3.11 -y && conda activate torch-env
+#   pip install torch==2.12.1 --index-url https://download.pytorch.org/whl/cu132
+#   pip install -r requirements.txt
+#
+# WHY torch must come first, from that index, and use a build that supports
+#   the target GPU architecture: older CUDA builds can import and report
+#   cuda.is_available() == True, then fail at kernel launch. Verify with an
+#   actual kernel, not just is_available():
+#     python -c "import torch; x=torch.randn(1000,1000,device='cuda'); print((x@x).sum())"
+#
+# REPRODUCIBILITY NOTE (learned 2026-08-30): LightGBM results are reproducible
+#   only for a FIXED thread count. train_lgbm.py / walkforward.py set
+#   num_threads=0 (= all cores), so the same code on a machine with a different
+#   core count can pick a different early-stopping round. Pin OMP_NUM_THREADS
+#   when a run needs to be comparable to a stored one.
+
+# --- core numerics ---
+numpy==2.4.6
+pandas==3.0.5
+pyarrow==25.0.1
+scipy==1.17.1
+
+# --- models ---
+lightgbm==4.7.0
+scikit-learn==1.9.0
+
+# --- hyperparameter search ---
+optuna==4.9.0
+
+# --- plotting ---
+matplotlib==3.11.1
+
+# --- data download (dataset/rawdata/, dataset/rawdata_cn/) ---
+# These are only needed to rebuild raw data, not to train from existing parquets.
+# yfinance >=0.2.54 uses curl_cffi internally, which is more resilient to 429s.
+yfinance>=0.2.54
+curl_cffi>=0.7
+requests>=2.28
+lxml>=4.9
+akshare
+baostock>=0.8.8

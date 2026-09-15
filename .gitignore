@@ -1,0 +1,24 @@
+# Python caches and notebook state
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Rebuildable datasets and raw downloads
+*.parquet
+dataset/rawdata/raw/
+dataset/rawdata_cn/raw/
+
+# Generated model outputs
+model/preds_*
+model/checkpoints/
+
+# Run logs and process state
+*.log
+*.out
+*.pid
+
+# Documents excluded from publication
+*.pdf
+
+# Operating-system metadata
+.DS_Store
